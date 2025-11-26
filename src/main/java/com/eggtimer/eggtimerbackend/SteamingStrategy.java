@@ -1,50 +1,49 @@
 package com.eggtimer.eggtimerbackend;
 
-// 4. Polymorphism (การพ้องรูป)
-// นี่คือกลยุทธ์ "ที่สอง" ของเราที่ implement สัญญาเดียวกัน
+import java.lang.Math;
+
 public class SteamingStrategy implements CookingStrategy {
 
     @Override
     public int calculateTime(Egg egg) {
-        int baseTime = 0; // เวลาเป็นวินาที
+        double mass = getMass(egg);
+        double tStart = getStartTemp(egg);
+        double tInternal = getTargetTemp(egg);
+        double tWater = 100.0; // ไอน้ำ
 
-        // --- Logic สำหรับไข่ไก่ (นึ่ง) ---
-        if (egg instanceof ChickenEgg) {
-            switch (egg.getDoneness()) {
-                case SOFT_BOILED: baseTime = 270; break; // 4.5 นาที
-                case MEDIUM_BOILED: baseTime = 390; break; // 6.5 นาที
-                case HARD_BOILED: baseTime = 540; break; // 9 นาที
-                case ONSEN: baseTime = 900; break; // (สมมติ)
-            }
-            if (egg.getSize() == EggSize.LARGE) baseTime += 60;
-            if (egg.getSize() == EggSize.SMALL) baseTime -= 30;
-        
-        // --- Logic สำหรับไข่เป็ด (นึ่ง) ---
-        } else if (egg instanceof DuckEgg) {
-             switch (egg.getDoneness()) {
-                case SOFT_BOILED: baseTime = 390; break; // 6.5 นาที
-                case MEDIUM_BOILED: baseTime = 510; break; // 8.5 นาที
-                case HARD_BOILED: baseTime = 660; break; // 11 นาที
-                case ONSEN: baseTime = 1400; break;
-            }
-             if (egg.getSize() == EggSize.LARGE) baseTime += 90;
-             if (egg.getSize() == EggSize.SMALL) baseTime -= 45;
+        // ปรับค่า K สำหรับการนึ่ง (Heat transfer coefficient ต่างจากน้ำเล็กน้อย)
+        double K = 0.45; 
 
-        // --- Logic สำหรับไข่นกกระทา (นึ่ง) ---
-        } else if (egg instanceof QuailEgg) {
-            switch (egg.getDoneness()) {
-                case SOFT_BOILED: baseTime = 100; break; // ~1.5 นาที
-                case MEDIUM_BOILED: baseTime = 130; break; // ~2 นาที
-                case HARD_BOILED: baseTime = 160; break; // ~2.5 นาที
-                case ONSEN: baseTime = 350; break;
+        double tempRatio = (0.76 * (tWater - tStart)) / (tWater - tInternal);
+        double logTerm = Math.log(tempRatio);
+        double massTerm = Math.pow(mass, 0.6667);
+
+        double timeInMinutes = K * massTerm * logTerm;
+
+        return (int) Math.round(timeInMinutes * 60);
+    }
+
+    // --- Helper Methods (เหมือนเดิม) ---
+    
+    private double getMass(Egg egg) {
+        if (egg instanceof QuailEgg) return 12.0;
+        if (egg instanceof DuckEgg) {
+            switch (egg.getSize()) {
+                case SMALL: return 70.0; case MEDIUM: return 80.0; case LARGE: return 95.0; default: return 80.0;
             }
         }
-
-        // --- ปรับเวลาตามอุณหภูมิ (ใช้ร่วมกัน) ---
-        if (egg.getStartTemp() == StartTemperature.FRIDGE) {
-            baseTime += 45; // นึ่งอาจจะใช้เวลาเพิ่มน้อยกว่าต้ม
+        switch (egg.getSize()) {
+            case SMALL: return 48.0; case MEDIUM: return 58.0; case LARGE: return 68.0; default: return 58.0;
         }
+    }
 
-        return baseTime;
+    private double getStartTemp(Egg egg) {
+        return (egg.getStartTemp() == StartTemperature.FRIDGE) ? 4.0 : 25.0;
+    }
+
+    private double getTargetTemp(Egg egg) {
+        switch (egg.getDoneness()) {
+            case SOFT_BOILED: return 63.0; case MEDIUM_BOILED: return 70.0; case HARD_BOILED: return 85.0; case ONSEN: return 63.0; default: return 70.0;
+        }
     }
 }

@@ -1,46 +1,65 @@
 package com.eggtimer.eggtimerbackend;
 
-// 4. Polymorphism (การพ้องรูป)
-// นี่คือกลยุทธ์ "ที่สาม" ของเราที่ implement สัญญาเดียวกัน
+import java.lang.Math;
+
 public class OnsenStrategy implements CookingStrategy {
 
     @Override
     public int calculateTime(Egg egg) {
+        double mass = getMass(egg);
+        double tStart = getStartTemp(egg);
+        double tInternal = getTargetTemp(egg);
         
-        // --- Logic สำหรับการต้มแบบออนเซ็น (Sous-vide) ---
-        // การต้มแบบนี้มักจะใช้อุณหภูมิต่ำ (เช่น 63-75°C)
-        // แต่ใช้เวลานานมาก และไม่ค่อยขึ้นกับขนาดหรืออุณหภูมิเริ่มต้น
-        
-        int baseTime = 0; // เวลาเป็นวินาที
+        // *** ไฮไลท์: ใช้น้ำอุณหภูมิต่ำ (Sous-vide) ไม่ใช่ 100 องศา ***
+        double tWater = getWaterTempForSousVide(egg.getDoneness());
 
-        // Logic นี้จะแตกต่างไปเลย
-        // เราจะสมมติว่าถ้าผู้ใช้เลือก "Onsen" (จาก Enum Doneness)
-        // เขาหมายถึงไข่แบบ Onsen Tamago (ไข่ขาวเป็นวุ้น ไข่แดงสุก)
-        // ซึ่งมักจะใช้เวลาคงที่ ไม่ว่าไข่จะเป็นชนิดไหน
+        double K = 0.435; 
+
+        double tempRatio = (0.76 * (tWater - tStart)) / (tWater - tInternal);
         
-        switch (egg.getDoneness()) {
-            case ONSEN:
-                // สมมติว่าต้มที่ 75°C
-                baseTime = 900; // 15 นาที 
-                break;
-            case SOFT_BOILED:
-                // ถ้าเลือก Soft-boiled แต่วิธี Onsen (เช่น 63°C)
-                baseTime = 3600; // 1 ชั่วโมง
-                break;
-            case MEDIUM_BOILED:
-                // ต้มแบบ Sous-vide ที่อุณหภูมิสูงขึ้น (เช่น 80°C)
-                baseTime = 1800; // 30 นาที
-                break;
-            case HARD_BOILED:
-                // ต้มแบบ Sous-vide (เช่น 90°C)
-                baseTime = 2700; // 45 นาที
-                break;
+        // ป้องกัน Error ทางคณิตศาสตร์
+        if (tempRatio <= 0) tempRatio = 1.01; 
+
+        double logTerm = Math.log(tempRatio);
+        double massTerm = Math.pow(mass, 0.6667);
+
+        double timeInMinutes = K * massTerm * logTerm;
+
+        return (int) Math.round(timeInMinutes * 60);
+    }
+
+    // --- Helper Methods ---
+
+    private double getWaterTempForSousVide(Doneness doneness) {
+        // ตั้งอุณหภูมิน้ำให้สูงกว่าเป้าหมาย (tInternal) เล็กน้อย (Delta T)
+        switch (doneness) {
+            case ONSEN:       return 68.0; 
+            case SOFT_BOILED: return 68.0; 
+            case MEDIUM_BOILED: return 73.0; 
+            case HARD_BOILED: return 85.0; 
+            default: return 73.0;
         }
+    }
 
-        // การต้มแบบ Sous-vide/Onsen มักจะไม่ต้องปรับเวลาตามขนาดหรืออุณหภูมิเริ่มต้น
-        // เพราะเป็นการ "แช่" จนอุณหภูมิถึงจุดที่ต้องการ
-        // ดังนั้น เราจึง "ไม่" ใส่ if-check สำหรับ getSize() หรือ getStartTemp() ที่นี่
-        
-        return baseTime;
+    private double getMass(Egg egg) {
+        if (egg instanceof QuailEgg) return 12.0;
+        if (egg instanceof DuckEgg) {
+            switch (egg.getSize()) {
+                case SMALL: return 70.0; case MEDIUM: return 80.0; case LARGE: return 95.0; default: return 80.0;
+            }
+        }
+        switch (egg.getSize()) {
+            case SMALL: return 48.0; case MEDIUM: return 58.0; case LARGE: return 68.0; default: return 58.0;
+        }
+    }
+
+    private double getStartTemp(Egg egg) {
+        return (egg.getStartTemp() == StartTemperature.FRIDGE) ? 4.0 : 25.0;
+    }
+
+    private double getTargetTemp(Egg egg) {
+        switch (egg.getDoneness()) {
+            case SOFT_BOILED: return 63.0; case MEDIUM_BOILED: return 68.0; case HARD_BOILED: return 80.0; case ONSEN: return 63.0; default: return 68.0;
+        }
     }
 }

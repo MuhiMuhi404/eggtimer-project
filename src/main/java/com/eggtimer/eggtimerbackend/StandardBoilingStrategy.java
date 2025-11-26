@@ -1,55 +1,62 @@
 package com.eggtimer.eggtimerbackend;
 
-// 4. Polymorphism (การพ้องรูป)
-// เรา "implements" (นำสัญญามาปฏิบัติ) จาก CookingStrategy
+import java.lang.Math;
+
 public class StandardBoilingStrategy implements CookingStrategy {
 
-    // เราต้อง @Override (เขียนทับ) method ที่สัญญากับ interface ไว้
     @Override
     public int calculateTime(Egg egg) {
-        int baseTime = 0; // เวลาเป็นวินาที
+        // 1. เตรียมตัวแปรตามหลักวิทยาศาสตร์
+        double mass = getMass(egg);           
+        double tStart = getStartTemp(egg);    
+        double tInternal = getTargetTemp(egg);
+        double tWater = 100.0;                // น้ำเดือด 100 C
 
-        // --- Logic สำหรับไข่ไก่ ---
-        // เราใช้ "instanceof" เพื่อเช็กว่าไข่ที่ส่งเข้ามาเป็นชนิดไหน
-        if (egg instanceof ChickenEgg) {
-            switch (egg.getDoneness()) {
-                case SOFT_BOILED: baseTime = 300; break; // 5 นาที
-                case MEDIUM_BOILED: baseTime = 420; break; // 7 นาที
-                case HARD_BOILED: baseTime = 600; break; // 10 นาที
-                case ONSEN: baseTime = 1000; break; // (สมมติ)
-            }
-            // ปรับเวลาตามขนาด (อ่านค่าจาก Getters)
-            if (egg.getSize() == EggSize.LARGE) baseTime += 60;
-            if (egg.getSize() == EggSize.SMALL) baseTime -= 30;
+        // 2. สูตร Dr. Charles D. H. Williams
+        // K ≈ 0.435 (สำหรับหน่วยนาที)
+        double K = 0.435; 
+        
+        double tempRatio = (0.76 * (tWater - tStart)) / (tWater - tInternal);
+        double logTerm = Math.log(tempRatio);
+        double massTerm = Math.pow(mass, 0.6667); // M^(2/3)
 
-        // --- Logic สำหรับไข่เป็ด (ใช้เวลานานกว่า) ---
-        } else if (egg instanceof DuckEgg) {
-            switch (egg.getDoneness()) {
-                case SOFT_BOILED: baseTime = 420; break; // 7 นาที
-                case MEDIUM_BOILED: baseTime = 540; break; // 9 นาที
-                case HARD_BOILED: baseTime = 720; break; // 12 นาที
-                case ONSEN: baseTime = 1500; break;
-            }
-            if (egg.getSize() == EggSize.LARGE) baseTime += 90;
-            if (egg.getSize() == EggSize.SMALL) baseTime -= 45;
+        double timeInMinutes = K * massTerm * logTerm;
 
-        // --- Logic สำหรับไข่นกกระทา (ใช้เวลาน้อยกว่า) ---
-        } else if (egg instanceof QuailEgg) {
-            switch (egg.getDoneness()) {
-                case SOFT_BOILED: baseTime = 120; break; // 2 นาที
-                case MEDIUM_BOILED: baseTime = 150; break; // 2.5 นาที
-                case HARD_BOILED: baseTime = 180; break; // 3 นาที
-                case ONSEN: baseTime = 400; break;
+        return (int) Math.round(timeInMinutes * 60);
+    }
+
+    // --- Helper Methods ---
+
+    private double getMass(Egg egg) {
+        if (egg instanceof QuailEgg) return 12.0; // นกกระทา
+        if (egg instanceof DuckEgg) {             // เป็ด
+            switch (egg.getSize()) {
+                case SMALL:  return 70.0;
+                case MEDIUM: return 80.0;
+                case LARGE:  return 95.0;
+                default:     return 80.0;
             }
-            // ไม่ต้องเช็ก Size
         }
-
-        // --- ปรับเวลาตามอุณหภูมิ (ใช้ร่วมกัน) ---
-        // (อ่านค่าจาก Getters)
-        if (egg.getStartTemp() == StartTemperature.FRIDGE) {
-            baseTime += 60; // บวก 1 นาที (โดยประมาณ) ถ้าไข่มาจากตู้เย็น
+        // ไก่ (Default)
+        switch (egg.getSize()) {
+            case SMALL:  return 48.0;
+            case MEDIUM: return 58.0;
+            case LARGE:  return 68.0;
+            default:     return 58.0;
         }
+    }
 
-        return baseTime;
+    private double getStartTemp(Egg egg) {
+        return (egg.getStartTemp() == StartTemperature.FRIDGE) ? 4.0 : 25.0;
+    }
+
+    private double getTargetTemp(Egg egg) {
+        switch (egg.getDoneness()) {
+            case SOFT_BOILED:   return 63.0;
+            case MEDIUM_BOILED: return 70.0;
+            case HARD_BOILED:   return 85.0;
+            case ONSEN:         return 63.0;
+            default:            return 70.0;
+        }
     }
 }

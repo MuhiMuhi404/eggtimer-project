@@ -52,7 +52,7 @@ public class EggTimerController {
         } 
         else { 
             // ถ้าไม่ใช่ "chicken" หรือ "duck" ก็ให้เป็น "quail"
-            egg = new QuailEgg(doneness, temp); // <-- Error จะเกิดที่นี่
+            egg = new QuailEgg(doneness, temp); 
         }
 
         // ----- 2. สร้าง STRATEGY (ใช้ Polymorphism) -----
