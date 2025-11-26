@@ -80,6 +80,7 @@ if (window.location.pathname.endsWith('timer.html')) {
     const timerDisplay = document.getElementById("timer-display");
     const statusText = document.getElementById("status");
     const alarmSound = document.getElementById("alarm-sound");
+    const fiveSecSound = document.getElementById("five-sec-sound");
 
     let countdownInterval;
     let remainingTime = 0; // ใช้จำเวลาที่เหลือ
@@ -139,13 +140,18 @@ if (window.location.pathname.endsWith('timer.html')) {
 
             // เตือน 5 วินาทีสุดท้าย
             if (remainingTime === 5) {
-                if (alarmSound) alarmSound.play();
+                if (fiveSecSound) {
+                    fiveSecSound.play().catch(e => console.log("Auto-play blocked:", e));
+                }
                 if (timerDisplay) timerDisplay.style.color = "red";
             }
 
             // หมดเวลา
             if (remainingTime <= 0) {
                 clearInterval(countdownInterval);
+                if (alarmSound) {
+                    alarmSound.play().catch(e => console.log("Auto-play blocked:", e));
+                }
                 if (timerDisplay) {
                     timerDisplay.textContent = "ต้มเสร็จแล้ว! 🍳";
                     timerDisplay.style.color = "green";
