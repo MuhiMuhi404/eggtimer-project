@@ -23,16 +23,39 @@ body{
 .logo span{color:#ffd166;}
 
 
-.btn-start{
-    padding:18px 40px;
-    font-size:18px;
-    background:#ffd166;
-    border:none;
-    cursor:pointer;
-    transition:transform .15s;
+/* รีเซ็ตปุ่มทั้งหมด */
+button {
+    all: unset; /* ลบทุกค่า default ของเบราว์เซอร์ */
+    display: inline-block;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    cursor: pointer;
+    user-select: none;
+    box-sizing: border-box;
 }
-.btn-start:hover{transform:translateY(-4px);}
-.btn-start:active{transform:translateY(2px);}
+
+/* ตกแต่งปุ่มให้น่ากด */
+.btn-container button {
+    padding: 18px 40px;
+    font-size: 16px;
+    background: linear-gradient(145deg, #ffd166, #fca311);
+    color: #fff;
+    border-radius: 12px;
+    font-weight: bold;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+.btn-container button:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
+
+.btn-container button:active {
+    transform: translateY(2px) scale(0.98);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
 
 
 .select-wrap{
@@ -78,4 +101,25 @@ body{
     margin-top:14px;
     font-size:22px;
     color: rgb(219, 118, 3);
+}
+
+#egg-display img {
+    /* ใช้ ID เพื่อให้โค้ดมีน้ำหนักสูงกว่า .egg-card img เดิม */
+    display: none; /* ซ่อนรูปภาพทั้งหมด (ส่วนนี้ยังคงเดิมสำหรับ slider) */
+    
+    /* ควบคุมสไตล์พิกเซลและขนาด */
+    width: 100%; /* ให้รูปภาพกว้างเต็มพื้นที่ของคอนเทนเนอร์ */
+    height: 300px; /* <--- ปรับความสูงตรงนี้! ลองเพิ่มเป็น 300px หรือ 400px */
+    object-fit: contain; /* <--- ใช้ 'contain' เพื่อรักษาสัดส่วน ไม่ให้รูปบิดเบี้ยว */
+    
+    /* อาจจะลอง 'cover' หรือ 'fill' ถ้าอยากให้เต็มพื้นที่แบบบิดเบี้ยวได้ (ไม่แนะนำสำหรับ pixel art) */
+    /* object-fit: cover; */ /* รูปจะครอบคลุมพื้นที่ แต่ส่วนเกินอาจถูกตัดออก */
+    /* object-fit: fill; */ /* รูปจะขยายเต็มพื้นที่พอดี แต่อาจทำให้รูปบิดเบี้ยว */
+
+    image-rendering: pixelated;
+}
+
+/* 3. รูปภาพที่กำลังแสดงผล: ต้องมีคลาส .active */
+#egg-display img.active {
+    display: block; /* แสดงเฉพาะรูปที่มีคลาส active */
 }

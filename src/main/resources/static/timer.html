@@ -4,28 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Egg Timer</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #fff8e6; text-align: center; padding: 40px; }
-        h1 { font-size: 80px; margin-bottom: 30px; color: #333; }
-        .btn-container { display: flex; justify-content: center; gap: 20px; }
-        button { padding: 12px 25px; font-size: 20px; border-radius: 10px; border: none; cursor: pointer; background: #ffcc66; transition: 0.2s; }
-        button:hover { background: #ffb300; }
-        button:disabled { background: #e0e0e0; cursor: not-allowed; }
-        #status { margin-top: 20px; font-size: 22px; color: #444; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 id="timer-display">00:00</h1>
-    <div class="btn-container">
-        <button id="start-button">Start</button>
-        <button id="pause-button" disabled>Pause</button>
-        <button id="resume-button" disabled>Resume</button>
-        <button id="cancel-button" disabled>Cancel</button>
-        <button id="boil-again-button" style="display:none;">Boil Again</button>
-        <button id="change-settings-button" style="display:none;">Change Settings</button>
-    </div>
-    <p id="status"></p>
-    <audio id="alarm-sound" src="alarm.mp3"></audio>
+    <main class="select-wrap">
+        <h1 class="sel-title">EGG TIMER</h1>
+
+        <div class="egg-card" id="egg-display">
+            <img src="pic/loop.png">
+            <img src="pic/loop2.png">
+            <img src="pic/loop3.png">
+            <h1 id="timer-display">00:00</h1>
+
+        <div class="btn-container">
+            <button id="start-button">Start</button>
+            <button id="pause-button" disabled>Pause</button>
+            <button id="resume-button" disabled>Resume</button>
+            <button id="cancel-button" disabled>Cancel</button>
+            <button id="boil-again-button" style="display:none;">Boil Again</button>
+            <button id="change-settings-button" style="display:none;">Change Settings</button>
+        </div>
+        </div>
+
+        <p id="status"></p>
+    <audio id="alarm-sound" src="sound/alarm.mp3"></audio>
+    <audio id="five-sec-sound" src="sound/fiveSec.mp3"></audio>
+    <audio id="bg-music" src="sound/bgm.mp3" loop></audio>
+    </main>
 
     <script src="app.js"></script>
 </body>

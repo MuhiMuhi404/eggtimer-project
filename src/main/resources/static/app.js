@@ -248,3 +248,43 @@ if (window.location.pathname.endsWith('timer.html')) {
     // เริ่มต้น: แสดงปุ่ม Start
     toggleButtons("ready");
 }
+
+
+function startImageLoop() {
+    // 1. เลือก div ที่เก็บรูปภาพด้วย ID
+    const container = document.getElementById('egg-display');
+    if (!container) return; // ออกจากฟังก์ชันถ้าไม่พบ id
+
+    // 2. เลือกรูปภาพทั้งหมดภายใน div นั้น
+    const images = container.getElementsByTagName('img');
+    let currentIndex = 0; // เริ่มต้นที่รูปแรก (index 0)
+
+    // ตรวจสอบว่ามีรูปภาพหรือไม่
+    if (images.length === 0) return;
+
+    // 3. ฟังก์ชันสำหรับแสดงรูปภาพถัดไป
+    function showNextImage() {
+        // ซ่อนรูปภาพที่กำลังแสดงอยู่ (นำคลาส active ออก)
+        if (images[currentIndex]) {
+            images[currentIndex].classList.remove('active');
+        }
+
+        // คำนวณ Index ถัดไป (วนกลับไป 0 เมื่อถึงรูปสุดท้าย)
+        currentIndex = (currentIndex + 1) % images.length;
+        
+        // แสดงรูปภาพถัดไป (เพิ่มคลาส active)
+        if (images[currentIndex]) {
+            images[currentIndex].classList.add('active');
+        }
+    }
+
+    // 4. ตั้งค่าเริ่มต้น: แสดงรูปแรก
+    images[currentIndex].classList.add('active');
+
+    // 5. ตั้งค่า Interval ให้เรียกฟังก์ชัน showNextImage ทุก 2000 มิลลิวินาที (2 วินาที)
+    // เปลี่ยน 2000 เป็นตัวเลขอื่น (หน่วยเป็นมิลลิวินาที) เพื่อเปลี่ยนความเร็ว
+    setInterval(showNextImage, 2000); 
+}
+
+// 6. เรียกฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
+document.addEventListener('DOMContentLoaded', startImageLoop);
