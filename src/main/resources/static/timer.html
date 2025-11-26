@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egg Timer</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #fff8e6; text-align: center; padding: 40px; }
+        h1 { font-size: 80px; margin-bottom: 30px; color: #333; }
+        .btn-container { display: flex; justify-content: center; gap: 20px; }
+        button { padding: 12px 25px; font-size: 20px; border-radius: 10px; border: none; cursor: pointer; background: #ffcc66; transition: 0.2s; }
+        button:hover { background: #ffb300; }
+        button:disabled { background: #e0e0e0; cursor: not-allowed; }
+        #status { margin-top: 20px; font-size: 22px; color: #444; }
+    </style>
+</head>
+<body>
+    <h1 id="timer-display">00:00</h1>
+    <div class="btn-container">
+        <button id="start-button">Start</button>
+        <button id="pause-button" disabled>Pause</button>
+        <button id="resume-button" disabled>Resume</button>
+        <button id="cancel-button" disabled>Cancel</button>
+    </div>
+    <p id="status"></p>
+    <audio id="alarm-sound" src="alarm.mp3"></audio>
+
+    <script src="app.js"></script>
+</body>
+</html>
