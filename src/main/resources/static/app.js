@@ -81,6 +81,7 @@ if (window.location.pathname.endsWith('timer.html')) {
     const statusText = document.getElementById("status");
     const alarmSound = document.getElementById("alarm-sound");
     const fiveSecSound = document.getElementById("five-sec-sound");
+    const bgMusic = document.getElementById("bg-music");
 
     let countdownInterval;
     let remainingTime = 0; // ใช้จำเวลาที่เหลือ
@@ -134,6 +135,11 @@ if (window.location.pathname.endsWith('timer.html')) {
     function runCountdown() {
         if (countdownInterval) clearInterval(countdownInterval);
         
+        if (bgMusic) {
+        bgMusic.volume = 0.3; // ปรับเสียงเบาหน่อย (30%) จะได้ไม่หนวกหู
+        bgMusic.play().catch(e => console.log("Auto-play blocked:", e));
+        }
+
         countdownInterval = setInterval(() => {
             remainingTime--;
             if (timerDisplay) timerDisplay.textContent = formatTime(remainingTime);
@@ -149,6 +155,11 @@ if (window.location.pathname.endsWith('timer.html')) {
             // หมดเวลา
             if (remainingTime <= 0) {
                 clearInterval(countdownInterval);
+                // --- หยุดเพลง BGM เมื่อเสร็จ ---
+                if (bgMusic) {
+                    bgMusic.pause();
+                    bgMusic.currentTime = 0; // รีเซ็ตเพลงไปจุดเริ่มต้น
+                }
                 if (alarmSound) {
                     alarmSound.play().catch(e => console.log("Auto-play blocked:", e));
                 }
@@ -213,6 +224,7 @@ if (window.location.pathname.endsWith('timer.html')) {
     if (pauseButton) {
         pauseButton.addEventListener("click", () => {
             clearInterval(countdownInterval);
+            if (bgMusic) bgMusic.pause(); // หยุดเพลงด้วย
             if (statusText) statusText.textContent = "หยุดชั่วคราว";
             toggleButtons("paused");
         });
@@ -231,6 +243,10 @@ if (window.location.pathname.endsWith('timer.html')) {
     if (cancelButton) {
         cancelButton.addEventListener("click", () => {
             clearInterval(countdownInterval);
+            if (bgMusic) {
+            bgMusic.pause();       // หยุดเพลง
+            bgMusic.currentTime = 0; // รีเซ็ต
+        }
             localStorage.clear();
             window.location.href = "index.html";
         });
