@@ -66,126 +66,185 @@ strategyCards.forEach(card => {
 // ===========================
 // Timer Page
 // ===========================
-const startButton = document.getElementById("start-button");
-const pauseButton = document.getElementById("pause-button");
-const resumeButton = document.getElementById("resume-button");
-const cancelButton = document.getElementById("cancel-button");
+// ตรวจสอบว่าอยู่หน้า timer.html หรือไม่ (เพื่อป้องกัน Error หน้าอื่น)
+if (window.location.pathname.endsWith('timer.html')) {
 
-const statusText = document.getElementById("status");
-const timerDisplay = document.getElementById("timer-display");
-const alarmSound = document.getElementById("alarm-sound");
+    // --- A. คว้าปุ่มและองค์ประกอบต่างๆ ---
+    const startButton = document.getElementById("start-button");
+    const pauseButton = document.getElementById("pause-button");
+    const resumeButton = document.getElementById("resume-button");
+    const cancelButton = document.getElementById("cancel-button");
+    const boilAgainButton = document.getElementById("boil-again-button");
+    const changeSettingsButton = document.getElementById("change-settings-button");
 
-let countdownInterval;
-let remainingTime = 0; // ใช้จำเวลาที่เหลือ
+    const timerDisplay = document.getElementById("timer-display");
+    const statusText = document.getElementById("status");
+    const alarmSound = document.getElementById("alarm-sound");
 
-function formatTime(totalSeconds) {
-    const m = Math.floor(totalSeconds / 60);
-    const s = totalSeconds % 60;
-    return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-}
+    let countdownInterval;
+    let remainingTime = 0; // ใช้จำเวลาที่เหลือ
 
-// ฟังก์ชันเริ่มนับถอยหลัง (ใช้ remainingTime เป็นหลัก)
-function runCountdown() {
-    clearInterval(countdownInterval);
+    // --- B. ฟังก์ชันแปลงเวลาและจัดการ UI ---
     
-    countdownInterval = setInterval(() => {
-        remainingTime--; // ลดเวลาลง
-        if (timerDisplay) timerDisplay.textContent = formatTime(remainingTime);
-
-        // เตือน 5 วินาทีสุดท้าย
-        if (remainingTime === 5) {
-            if (alarmSound) alarmSound.play();
-            if (timerDisplay) timerDisplay.style.color = "red";
-        }
-
-        // หมดเวลา
-        if (remainingTime <= 0) {
-            clearInterval(countdownInterval);
-            if (timerDisplay) timerDisplay.textContent = "ต้มเสร็จแล้ว! 🍳";
-            if (statusText) statusText.textContent = "ทานให้อร่อยนะครับ!";
-            toggleButtons("finished"); // เปลี่ยนปุ่มเมื่อเสร็จ
-        }
-    }, 1000);
-}
-
-// ฟังก์ชันสลับปุ่มตามสถานะ
-function toggleButtons(state) {
-    if (state === "running") {
-        startButton.style.display = "none";
-        pauseButton.disabled = false;
-        pauseButton.style.display = "inline-block";
-        resumeButton.style.display = "none";
-        cancelButton.disabled = false;
-    } else if (state === "paused") {
-        pauseButton.style.display = "none";
-        resumeButton.disabled = false;
-        resumeButton.style.display = "inline-block";
-    } else if (state === "finished") {
-        pauseButton.style.display = "none";
-        resumeButton.style.display = "none";
-        cancelButton.textContent = "หน้าหลัก";
+    function formatTime(totalSeconds) {
+        const m = Math.floor(totalSeconds / 60);
+        const s = totalSeconds % 60;
+        return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
     }
-}
 
-// --- Event Listeners ---
+    // ฟังก์ชันจัดการการแสดงผลปุ่ม (State Management)
+    function toggleButtons(state) {
+        // ซ่อนทุกปุ่มก่อน
+        [startButton, pauseButton, resumeButton, cancelButton, boilAgainButton, changeSettingsButton].forEach(btn => {
+            if (btn) btn.style.display = "none";
+        });
 
-if (startButton) {
-    startButton.addEventListener("click", async () => {
-        // อ่านค่าจาก LocalStorage
+        // แสดงปุ่มตามสถานะ
+        if (state === "ready") {
+            if(startButton) startButton.style.display = "inline-block";
+        } 
+        else if (state === "running") {
+            if(pauseButton) {
+                pauseButton.style.display = "inline-block";
+                pauseButton.disabled = false;
+            }
+            if(cancelButton) {
+                cancelButton.style.display = "inline-block";
+                cancelButton.disabled = false;
+            }
+        } 
+        else if (state === "paused") {
+            if(resumeButton) {
+                resumeButton.style.display = "inline-block";
+                resumeButton.disabled = false;
+            }
+            if(cancelButton) {
+                cancelButton.style.display = "inline-block";
+                cancelButton.disabled = false;
+            }
+        } 
+        else if (state === "finished") {
+            if(boilAgainButton) boilAgainButton.style.display = "inline-block";
+            if(changeSettingsButton) changeSettingsButton.style.display = "inline-block";
+        }
+    }
+
+    // ฟังก์ชันนับถอยหลัง
+    function runCountdown() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        
+        countdownInterval = setInterval(() => {
+            remainingTime--;
+            if (timerDisplay) timerDisplay.textContent = formatTime(remainingTime);
+
+            // เตือน 5 วินาทีสุดท้าย
+            if (remainingTime === 5) {
+                if (alarmSound) alarmSound.play();
+                if (timerDisplay) timerDisplay.style.color = "red";
+            }
+
+            // หมดเวลา
+            if (remainingTime <= 0) {
+                clearInterval(countdownInterval);
+                if (timerDisplay) {
+                    timerDisplay.textContent = "ต้มเสร็จแล้ว! 🍳";
+                    timerDisplay.style.color = "green";
+                }
+                if (statusText) statusText.textContent = "ไข่สุกพร้อมทานแล้ว";
+                toggleButtons("finished");
+            }
+        }, 1000);
+    }
+
+    // ฟังก์ชันหลัก: ยิง API และเริ่มนับ
+    async function fetchAndStart() {
         const type = getSelection("type");
         const size = getSelection("size");
         const doneness = getSelection("doneness");
         const temp = getSelection("temp");
         const strategy = getSelection("strategyName");
 
+        // สร้าง URL
         const url = `http://localhost:8080/api/calculateTime?type=${type}&doneness=${doneness}&size=${size}&temp=${temp}&strategyName=${strategy}`;
+        console.log("Calling API:", url);
 
         try {
+            if (statusText) statusText.textContent = "กำลังคำนวณเวลา...";
+            
             const response = await fetch(url);
-            // **แก้ให้รับ Error กรณีส่งค่าผิด**
             if (!response.ok) throw new Error("Backend Error");
 
             const seconds = await response.json();
+            console.log("Time received:", seconds);
             
-            // เริ่มต้นจับเวลา
+            // ตั้งค่าเริ่มต้น
             remainingTime = seconds;
-            timerDisplay.textContent = formatTime(remainingTime);
-            statusText.textContent = "กำลังจับเวลา...";
+            if (timerDisplay) {
+                timerDisplay.textContent = formatTime(remainingTime);
+                timerDisplay.style.color = "black";
+            }
+            if (statusText) statusText.textContent = "กำลังจับเวลา...";
             
+            // เริ่มทำงาน
             runCountdown();
-            toggleButtons("running"); // สั่งให้ปุ่ม Start หายไป
+            toggleButtons("running");
 
         } catch (err) {
-            timerDisplay.textContent = "Error!";
-            statusText.textContent = "เช็กไฟล์ HTML ว่า data-name ตรงกับ Java Enum ไหม";
             console.error(err);
+            if (timerDisplay) timerDisplay.textContent = "Error!";
+            if (statusText) statusText.textContent = "เกิดข้อผิดพลาด กรุณาตรวจสอบค่าที่เลือก";
         }
-    });
-}
+    }
 
-// ปุ่มหยุดชั่วคราว
-if (pauseButton) {
-    pauseButton.addEventListener("click", () => {
-        clearInterval(countdownInterval); // หยุดเวลา
-        if (statusText) statusText.textContent = "หยุดชั่วคราว";
-        toggleButtons("paused");
-    });
-}
+    // --- C. ผูก Event Listeners กับปุ่ม ---
 
-// ปุ่มนับต่อ
-if (resumeButton) {
-    resumeButton.addEventListener("click", () => {
-        runCountdown(); // นับต่อจาก remainingTime เดิม
-        if (statusText) statusText.textContent = "กำลังจับเวลา...";
-        toggleButtons("running");
-    });
-}
+    // ปุ่ม Start (เริ่มครั้งแรก)
+    if (startButton) {
+        startButton.addEventListener("click", fetchAndStart);
+    }
 
-// ปุ่มยกเลิก / หน้าหลัก
-if (cancelButton) {
-    cancelButton.addEventListener("click", () => {
-        clearInterval(countdownInterval);
-        localStorage.clear(); // ล้างค่าที่เลือกไว้
-        window.location.href = "index.html"; // กลับหน้าแรก
-    });
+    // ปุ่ม Pause (หยุดชั่วคราว)
+    if (pauseButton) {
+        pauseButton.addEventListener("click", () => {
+            clearInterval(countdownInterval);
+            if (statusText) statusText.textContent = "หยุดชั่วคราว";
+            toggleButtons("paused");
+        });
+    }
+
+    // ปุ่ม Resume (นับต่อ)
+    if (resumeButton) {
+        resumeButton.addEventListener("click", () => {
+            runCountdown();
+            if (statusText) statusText.textContent = "กำลังจับเวลา...";
+            toggleButtons("running");
+        });
+    }
+
+    // ปุ่ม Cancel (ยกเลิก/กลับหน้าแรก)
+    if (cancelButton) {
+        cancelButton.addEventListener("click", () => {
+            clearInterval(countdownInterval);
+            localStorage.clear();
+            window.location.href = "index.html";
+        });
+    }
+
+    // ปุ่ม Boil Again (เริ่มใหม่ด้วยค่าเดิม)
+    if (boilAgainButton) {
+        boilAgainButton.addEventListener("click", () => {
+            fetchAndStart(); // เรียกฟังก์ชันเดิม ค่าใน localStorage ยังอยู่
+        });
+    }
+
+    // ปุ่ม Change Settings (ล้างค่าและกลับไปเลือกใหม่)
+    if (changeSettingsButton) {
+        changeSettingsButton.addEventListener("click", () => {
+            localStorage.clear();
+            window.location.href = "select.html"; // หรือ index.html
+        });
+    }
+
+    // เริ่มต้น: แสดงปุ่ม Start
+    toggleButtons("ready");
 }
