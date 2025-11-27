@@ -183,10 +183,10 @@ if (window.location.pathname.endsWith('timer.html')) {
                     alarmSound.play().catch(e => console.log("Auto-play blocked:", e));
                 }
                 if (timerDisplay) {
-                    timerDisplay.textContent = "ต้มเสร็จแล้ว! 🍳";
+                    timerDisplay.textContent = "Complete! 🍳";
                     timerDisplay.style.color = "green";
                 }
-                if (statusText) statusText.textContent = "ไข่สุกพร้อมทานแล้ว";
+                if (statusText) statusText.textContent = "The egg is ready to eat.";
                 toggleButtons("finished");
             }
         }, 1000);
@@ -205,7 +205,7 @@ if (window.location.pathname.endsWith('timer.html')) {
         console.log("Calling API:", url);
 
         try {
-            if (statusText) statusText.textContent = "กำลังคำนวณเวลา...";
+            if (statusText) statusText.textContent = "Calculating time...";
             
             const response = await fetch(url);
             if (!response.ok) throw new Error("Backend Error");
@@ -219,7 +219,7 @@ if (window.location.pathname.endsWith('timer.html')) {
                 timerDisplay.textContent = formatTime(remainingTime);
                 timerDisplay.style.color = "black";
             }
-            if (statusText) statusText.textContent = "กำลังจับเวลา...";
+            if (statusText) statusText.textContent = "Timer running...";
             
             // เริ่มทำงาน
             runCountdown();
@@ -228,7 +228,7 @@ if (window.location.pathname.endsWith('timer.html')) {
         } catch (err) {
             console.error(err);
             if (timerDisplay) timerDisplay.textContent = "Error!";
-            if (statusText) statusText.textContent = "เกิดข้อผิดพลาด กรุณาตรวจสอบค่าที่เลือก";
+            if (statusText) statusText.textContent = "An error occurred. Please check selected values.";
         }
     }
 
@@ -244,7 +244,7 @@ if (window.location.pathname.endsWith('timer.html')) {
         pauseButton.addEventListener("click", () => {
             clearInterval(countdownInterval);
             if (bgMusic) bgMusic.pause(); // หยุดเพลงด้วย
-            if (statusText) statusText.textContent = "หยุดชั่วคราว";
+            if (statusText) statusText.textContent = "Paused";
             toggleButtons("paused");
         });
     }
@@ -253,7 +253,7 @@ if (window.location.pathname.endsWith('timer.html')) {
     if (resumeButton) {
         resumeButton.addEventListener("click", () => {
             runCountdown();
-            if (statusText) statusText.textContent = "กำลังจับเวลา...";
+            if (statusText) statusText.textContent = "Timer running...";
             toggleButtons("running");
         });
     }
