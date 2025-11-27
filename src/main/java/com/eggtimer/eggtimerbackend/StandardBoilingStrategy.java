@@ -25,7 +25,7 @@ public class StandardBoilingStrategy implements CookingStrategy {
         return (int) Math.round(timeInMinutes * 60);
     }
 
-    // --- Helper Methods ---
+    // Helper Methods
 
     private double getMass(Egg egg) {
         if (egg instanceof QuailEgg) return 12.0; // นกกระทา
@@ -55,7 +55,6 @@ public class StandardBoilingStrategy implements CookingStrategy {
             case SOFT_BOILED:   return 63.0;
             case MEDIUM_BOILED: return 70.0;
             case HARD_BOILED:   return 85.0;
-            case ONSEN:         return 63.0;
             default:            return 70.0;
         }
     }

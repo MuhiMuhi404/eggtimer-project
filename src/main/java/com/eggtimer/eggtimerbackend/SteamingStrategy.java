@@ -11,7 +11,7 @@ public class SteamingStrategy implements CookingStrategy {
         double tInternal = getTargetTemp(egg);
         double tWater = 100.0; // ไอน้ำ
 
-        // ปรับค่า K สำหรับการนึ่ง (Heat transfer coefficient ต่างจากน้ำเล็กน้อย)
+        // ปรับค่า K สำหรับการนึ่ง
         double K = 0.45; 
 
         double tempRatio = (0.76 * (tWater - tStart)) / (tWater - tInternal);
@@ -23,7 +23,7 @@ public class SteamingStrategy implements CookingStrategy {
         return (int) Math.round(timeInMinutes * 60);
     }
 
-    // --- Helper Methods (เหมือนเดิม) ---
+    // Helper Methods
     
     private double getMass(Egg egg) {
         if (egg instanceof QuailEgg) return 12.0;
@@ -43,7 +43,7 @@ public class SteamingStrategy implements CookingStrategy {
 
     private double getTargetTemp(Egg egg) {
         switch (egg.getDoneness()) {
-            case SOFT_BOILED: return 63.0; case MEDIUM_BOILED: return 70.0; case HARD_BOILED: return 85.0; case ONSEN: return 63.0; default: return 70.0;
+            case SOFT_BOILED: return 63.0; case MEDIUM_BOILED: return 70.0; case HARD_BOILED: return 85.0;default: return 70.0;
         }
     }
 }

@@ -10,7 +10,7 @@ public class OnsenStrategy implements CookingStrategy {
         double tStart = getStartTemp(egg);
         double tInternal = getTargetTemp(egg);
         
-        // *** ไฮไลท์: ใช้น้ำอุณหภูมิต่ำ (Sous-vide) ไม่ใช่ 100 องศา ***
+        // ต้องใช้น้ำอุณหภูมิต่ำที่ไม่ใช่ 100 องศา
         double tWater = getWaterTempForSousVide(egg.getDoneness());
 
         double K = 0.435; 
@@ -28,12 +28,11 @@ public class OnsenStrategy implements CookingStrategy {
         return (int) Math.round(timeInMinutes * 60);
     }
 
-    // --- Helper Methods ---
+    // Helper Methods
 
     private double getWaterTempForSousVide(Doneness doneness) {
         // ตั้งอุณหภูมิน้ำให้สูงกว่าเป้าหมาย (tInternal) เล็กน้อย (Delta T)
         switch (doneness) {
-            case ONSEN:       return 68.0; 
             case SOFT_BOILED: return 68.0; 
             case MEDIUM_BOILED: return 73.0; 
             case HARD_BOILED: return 85.0; 
@@ -59,7 +58,7 @@ public class OnsenStrategy implements CookingStrategy {
 
     private double getTargetTemp(Egg egg) {
         switch (egg.getDoneness()) {
-            case SOFT_BOILED: return 63.0; case MEDIUM_BOILED: return 68.0; case HARD_BOILED: return 80.0; case ONSEN: return 63.0; default: return 68.0;
+            case SOFT_BOILED: return 63.0; case MEDIUM_BOILED: return 68.0; case HARD_BOILED: return 80.0;default: return 68.0;
         }
     }
 }
