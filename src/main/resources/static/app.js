@@ -19,21 +19,12 @@ typeCards.forEach(card => {
     });
 });
 
-// ===========================
-// Egg Size
-// ===========================
-const sizeCards = document.querySelectorAll("#size .egg-card");
-sizeCards.forEach(card => {
-    card.addEventListener("click", () => {
-        saveSelection("size", card.dataset.name);
-        window.location.href = "doneness.html";
-    });
-});
 // ซ่อนตัวเลือกสำหรับไข่นกกระทา
 if (window.location.pathname.endsWith('size.html')) {
     const selectedType = getSelection("type");
 
     if (selectedType === "quail") {
+        console.log("ไข่นกกระทา: ซ่อนตัวเลือก Small และ Large");
         // ถ้าเป็นไข่นกกระทา ให้ซ่อน Small และ Large
         const smallCard = document.querySelector('.egg-card[data-name="SMALL"]');
         const largeCard = document.querySelector('.egg-card[data-name="LARGE"]');
@@ -46,6 +37,16 @@ if (window.location.pathname.endsWith('size.html')) {
         if (mediumCardText) mediumCardText.innerHTML = "Standard<br><br>Size";
     }
 }
+// ===========================
+// Egg Size
+// ===========================
+const sizeCards = document.querySelectorAll("#size .egg-card");
+sizeCards.forEach(card => {
+    card.addEventListener("click", () => {
+        saveSelection("size", card.dataset.name);
+        window.location.href = "doneness.html";
+    });
+});
 
 
 // ===========================
