@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <main class="select-wrap">
         <h1 class="sel-title">EGG TIMER</h1>
@@ -17,21 +19,22 @@
             <img src="pic/loop3.png">
             <h1 id="timer-display">00:00</h1>
 
-        <div class="btn-container">
-            <button id="start-button">Start</button>
-            <button id="pause-button" disabled>Pause</button>
-            <button id="resume-button" disabled>Resume</button>
-            <button id="cancel-button" disabled>Cancel</button>
-            <button id="boil-again-button" style="display:none;">Boil Again</button>
-            <button id="change-settings-button" style="display:none;">Change Settings</button>
-        </div>
+            <div class="btn-container">
+                <button id="start-button">Start</button>
+                <button id="pause-button" disabled>Pause</button>
+                <button id="resume-button" disabled>Resume</button>
+                <button id="cancel-button" disabled>Cancel</button>
+                <button id="boil-again-button" style="display:none;">Boil Again</button>
+                <button id="change-settings-button" style="display:none;">Change Settings</button>
+            </div>
         </div>
 
         <p id="status"></p>
-    <audio id="alarm-sound" src="sound/alarm.mp3"></audio>
-    <audio id="five-sec-sound" src="sound/fiveSec.mp3"></audio>
-    <audio id="bg-music" src="sound/bgm.mp3" loop></audio>
+        <audio id="alarm-sound" src="sound/alarm.mp3"></audio>
+        <audio id="five-sec-sound" src="sound/fiveSec.mp3"></audio>
+        <audio id="bg-music" src="sound/bgm.mp3" loop></audio>
     </main>
     <script src="app.js"></script>
 </body>
+
 </html>

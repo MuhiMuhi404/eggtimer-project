@@ -25,10 +25,10 @@ if (window.location.pathname.endsWith('size.html')) {
         // ถ้าเป็นไข่นกกระทา ให้ซ่อน Small และ Large
         const smallCard = document.querySelector('.egg-card[data-name="SMALL"]');
         const largeCard = document.querySelector('.egg-card[data-name="LARGE"]');
-        
+
         if (smallCard) smallCard.style.display = "none";
         if (largeCard) largeCard.style.display = "none";
-        
+
         // เปลี่ยนข้อความของ Medium ให้ชัดเจนขึ้น
         const mediumCardText = document.querySelector('.egg-card[data-name="MEDIUM"] p');
         if (mediumCardText) mediumCardText.innerHTML = "Standard Size";
@@ -100,7 +100,7 @@ if (window.location.pathname.endsWith('timer.html')) {
     function formatTime(totalSeconds) {
         const m = Math.floor(totalSeconds / 60);
         const s = totalSeconds % 60;
-        return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     }
 
     // ฟังก์ชันจัดการการแสดงผลปุ่ม (State Management)
@@ -112,41 +112,41 @@ if (window.location.pathname.endsWith('timer.html')) {
 
         // แสดงปุ่มตามสถานะ
         if (state === "ready") {
-            if(startButton) startButton.style.display = "inline-block";
-        } 
+            if (startButton) startButton.style.display = "inline-block";
+        }
         else if (state === "running") {
-            if(pauseButton) {
+            if (pauseButton) {
                 pauseButton.style.display = "inline-block";
                 pauseButton.disabled = false;
             }
-            if(cancelButton) {
+            if (cancelButton) {
                 cancelButton.style.display = "inline-block";
                 cancelButton.disabled = false;
             }
-        } 
+        }
         else if (state === "paused") {
-            if(resumeButton) {
+            if (resumeButton) {
                 resumeButton.style.display = "inline-block";
                 resumeButton.disabled = false;
             }
-            if(cancelButton) {
+            if (cancelButton) {
                 cancelButton.style.display = "inline-block";
                 cancelButton.disabled = false;
             }
-        } 
+        }
         else if (state === "finished") {
-            if(boilAgainButton) boilAgainButton.style.display = "inline-block";
-            if(changeSettingsButton) changeSettingsButton.style.display = "inline-block";
+            if (boilAgainButton) boilAgainButton.style.display = "inline-block";
+            if (changeSettingsButton) changeSettingsButton.style.display = "inline-block";
         }
     }
 
     // ฟังก์ชันนับถอยหลัง
     function runCountdown() {
         if (countdownInterval) clearInterval(countdownInterval);
-        
+
         if (bgMusic) {
-        bgMusic.volume = 0.3; // ปรับเสียงเบาลง30%
-        bgMusic.play().catch(e => console.log("Auto-play blocked:", e));
+            bgMusic.volume = 0.3; // ปรับเสียงเบาลง30%
+            bgMusic.play().catch(e => console.log("Auto-play blocked:", e));
         }
 
         countdownInterval = setInterval(() => {
@@ -196,13 +196,13 @@ if (window.location.pathname.endsWith('timer.html')) {
 
         try {
             if (statusText) statusText.textContent = "Calculating time...";
-            
+
             const response = await fetch(url);
             if (!response.ok) throw new Error("Backend Error");
 
             const seconds = await response.json();
             console.log("Time received:", seconds);
-            
+
             // ตั้งค่าเริ่มต้น
             remainingTime = seconds;
             if (timerDisplay) {
@@ -210,7 +210,7 @@ if (window.location.pathname.endsWith('timer.html')) {
                 timerDisplay.style.color = "black";
             }
             if (statusText) statusText.textContent = "Timer running...";
-            
+
             // เริ่มทำงาน
             runCountdown();
             toggleButtons("running");
@@ -253,9 +253,9 @@ if (window.location.pathname.endsWith('timer.html')) {
         cancelButton.addEventListener("click", () => {
             clearInterval(countdownInterval);
             if (bgMusic) {
-            bgMusic.pause();       // หยุดเพลง
-            bgMusic.currentTime = 0; // รีเซ็ต
-        }
+                bgMusic.pause();       // หยุดเพลง
+                bgMusic.currentTime = 0; // รีเซ็ต
+            }
             localStorage.clear();
             window.location.href = "index.html";
         });
@@ -302,7 +302,7 @@ function startImageLoop() {
 
         // คำนวณ Index ถัดไป (วนกลับไป 0 เมื่อถึงรูปสุดท้าย)
         currentIndex = (currentIndex + 1) % images.length;
-        
+
         // แสดงรูปภาพถัดไป (เพิ่มคลาส active)
         if (images[currentIndex]) {
             images[currentIndex].classList.add('active');
@@ -313,7 +313,7 @@ function startImageLoop() {
     images[currentIndex].classList.add('active');
 
     // ตั้งค่า Interval ให้เรียกฟังก์ชัน showNextImage ทุก2 วินาที
-    setInterval(showNextImage, 2000); 
+    setInterval(showNextImage, 2000);
 }
 
 //เรียกฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
@@ -342,8 +342,9 @@ function closeModalOnly() {
 }
 
 //ปิดกล่องข้อความเมื่อคลิกนอก Modal (ยังคงทำงานเหมือนเดิม)
-window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
+
