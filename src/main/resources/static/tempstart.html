@@ -21,6 +21,27 @@
         </div>
     </main>
 
+<button id="toggleButton" class="circle-button" onclick="toggleModal()">
+    <img src="pic/light-bulb.png" alt="Icon" class="button-icon">
+</button>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModalOnly()">&times;</span>
+        
+        <img src="pic/tips.png"alt="Icon" class="head-icon">
+        <div class="tips-content">
+            <ul>
+                <li><span>Room Temperature</span></li>
+                <li><span class="detail">The actual, constant temperature state(25°C).<br><br></span></li>
+                <li><span>Frigge Temperature</span></li>
+                <li><span class="detail">The act of warming <br>a cold item(4°C) up to <br>temperature state.</span></li>
+            </ul>
+            <p>🥚🌟🥚🌟🥚🌟🥚</p>
+        </div>
+    </div>
+</div>
+
     <script src="app.js"></script>
 </body>
 </html>
