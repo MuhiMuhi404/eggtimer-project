@@ -12,7 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 40px;
-    background-color: rgb(255, 250, 215);
+    background-color: rgb(255, 250, 205);
 }
 
 
@@ -84,7 +84,7 @@ button {
 
 
 .egg-card {
-    background: #fff879;
+    background: #fff092;
     padding: 14px;
 }
 
@@ -106,7 +106,7 @@ button {
 .egg-card p {
     margin-top: 14px;
     font-size: 22px;
-    color: rgb(219, 118, 3);
+    color: rgb(225, 119, 33);
 }
 
 #egg-display img {
