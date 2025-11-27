@@ -5,14 +5,23 @@ function saveSelection(key, value) {
 function getSelection(key) {
     return localStorage.getItem(key);
 }
+// เสียง Pop
+const popSound = new Audio('sound/pop.mp3');
 
+function playPopAndRedirect(nextPage) {
+    popSound.currentTime = 0; // รีเซ็ต
+    popSound.play().catch(e => console.log("Audio error:", e));
+    setTimeout(() => {
+        window.location.href = nextPage;
+    }, 300);
+}
 
 // Egg Type
 const typeCards = document.querySelectorAll("#egg-type .egg-card");
 typeCards.forEach(card => {
     card.addEventListener("click", () => {
         saveSelection("type", card.dataset.name);
-        window.location.href = "size.html";
+        playPopAndRedirect("size.html");
     });
 });
 
@@ -40,7 +49,7 @@ const sizeCards = document.querySelectorAll("#size .egg-card");
 sizeCards.forEach(card => {
     card.addEventListener("click", () => {
         saveSelection("size", card.dataset.name);
-        window.location.href = "doneness.html";
+        playPopAndRedirect("doneness.html");
     });
 });
 
@@ -50,7 +59,7 @@ const donenessCards = document.querySelectorAll("#doneness .egg-card");
 donenessCards.forEach(card => {
     card.addEventListener("click", () => {
         saveSelection("doneness", card.dataset.name);
-        window.location.href = "tempstart.html";
+        playPopAndRedirect("tempstart.html");
     });
 });
 
@@ -59,7 +68,7 @@ const tempCards = document.querySelectorAll("#temp .egg-card");
 tempCards.forEach(card => {
     card.addEventListener("click", () => {
         saveSelection("temp", card.dataset.name);
-        window.location.href = "cookingstrategy.html";
+        playPopAndRedirect("cookingstrategy.html");
     });
 });
 
@@ -69,7 +78,7 @@ const strategyCards = document.querySelectorAll("#strategy .egg-card");
 strategyCards.forEach(card => {
     card.addEventListener("click", () => {
         saveSelection("strategyName", card.dataset.name);
-        window.location.href = "timer.html";
+        playPopAndRedirect("timer.html");
     });
 });
 
