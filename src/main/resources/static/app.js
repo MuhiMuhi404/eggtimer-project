@@ -29,6 +29,24 @@ sizeCards.forEach(card => {
         window.location.href = "doneness.html";
     });
 });
+// ซ่อนตัวเลือกสำหรับไข่นกกระทา
+if (window.location.pathname.endsWith('size.html')) {
+    const selectedType = getSelection("type");
+
+    if (selectedType === "quail") {
+        // ถ้าเป็นไข่นกกระทา ให้ซ่อน Small และ Large
+        const smallCard = document.querySelector('.egg-card[data-name="SMALL"]');
+        const largeCard = document.querySelector('.egg-card[data-name="LARGE"]');
+        
+        if (smallCard) smallCard.style.display = "none";
+        if (largeCard) largeCard.style.display = "none";
+        
+        // (ลูกเล่นเสริม) เปลี่ยนข้อความของ Medium ให้ชัดเจนขึ้น
+        const mediumCardText = document.querySelector('.egg-card[data-name="MEDIUM"] p');
+        if (mediumCardText) mediumCardText.innerHTML = "Standard<br><br>Size";
+    }
+}
+
 
 // ===========================
 // Egg Doneness
