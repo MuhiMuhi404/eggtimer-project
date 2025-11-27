@@ -26,6 +26,12 @@
     </div>
     
     <audio id="open-music" src="sound/open.mp3" autoplay loop></audio>
+    <script>
+        document.body.addEventListener('click', () => {
+            const audio = document.getElementById('open-music');
+            if (audio) audio.play().catch(() => {});
+        }, { once: true });
+    </script>
 </body>
 
 </html>
