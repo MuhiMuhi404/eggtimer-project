@@ -34,7 +34,7 @@ if (window.location.pathname.endsWith('size.html')) {
         
         // (ลูกเล่นเสริม) เปลี่ยนข้อความของ Medium ให้ชัดเจนขึ้น
         const mediumCardText = document.querySelector('.egg-card[data-name="MEDIUM"] p');
-        if (mediumCardText) mediumCardText.innerHTML = "Standard<br><br>Size";
+        if (mediumCardText) mediumCardText.innerHTML = "Standard Size";
     }
 }
 // ===========================
@@ -228,7 +228,7 @@ if (window.location.pathname.endsWith('timer.html')) {
         } catch (err) {
             console.error(err);
             if (timerDisplay) timerDisplay.textContent = "Error!";
-            if (statusText) statusText.textContent = "An error occurred. Please check selected values.";
+            if (statusText) statusText.textContent = "An error occurred.Please check selected values.";
         }
     }
 
