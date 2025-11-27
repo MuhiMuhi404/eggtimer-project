@@ -1,6 +1,4 @@
-// ===========================
 // Utility
-// ===========================
 function saveSelection(key, value) {
     localStorage.setItem(key, value);
 }
@@ -8,9 +6,8 @@ function getSelection(key) {
     return localStorage.getItem(key);
 }
 
-// ===========================
+
 // Egg Type
-// ===========================
 const typeCards = document.querySelectorAll("#egg-type .egg-card");
 typeCards.forEach(card => {
     card.addEventListener("click", () => {
@@ -32,14 +29,13 @@ if (window.location.pathname.endsWith('size.html')) {
         if (smallCard) smallCard.style.display = "none";
         if (largeCard) largeCard.style.display = "none";
         
-        // (ลูกเล่นเสริม) เปลี่ยนข้อความของ Medium ให้ชัดเจนขึ้น
+        // เปลี่ยนข้อความของ Medium ให้ชัดเจนขึ้น
         const mediumCardText = document.querySelector('.egg-card[data-name="MEDIUM"] p');
         if (mediumCardText) mediumCardText.innerHTML = "Standard Size";
     }
 }
-// ===========================
+
 // Egg Size
-// ===========================
 const sizeCards = document.querySelectorAll("#size .egg-card");
 sizeCards.forEach(card => {
     card.addEventListener("click", () => {
@@ -49,9 +45,7 @@ sizeCards.forEach(card => {
 });
 
 
-// ===========================
 // Egg Doneness
-// ===========================
 const donenessCards = document.querySelectorAll("#doneness .egg-card");
 donenessCards.forEach(card => {
     card.addEventListener("click", () => {
@@ -60,9 +54,7 @@ donenessCards.forEach(card => {
     });
 });
 
-// ===========================
 // Temperature
-// ===========================
 const tempCards = document.querySelectorAll("#temp .egg-card");
 tempCards.forEach(card => {
     card.addEventListener("click", () => {
@@ -71,9 +63,8 @@ tempCards.forEach(card => {
     });
 });
 
-// ===========================
+
 // Cooking Strategy
-// ===========================
 const strategyCards = document.querySelectorAll("#strategy .egg-card");
 strategyCards.forEach(card => {
     card.addEventListener("click", () => {
@@ -82,13 +73,12 @@ strategyCards.forEach(card => {
     });
 });
 
-// ===========================
+
 // Timer Page
-// ===========================
 // ตรวจสอบว่าอยู่หน้า timer.html หรือไม่ (เพื่อป้องกัน Error หน้าอื่น)
 if (window.location.pathname.endsWith('timer.html')) {
 
-    // --- A. คว้าปุ่มและองค์ประกอบต่างๆ ---
+    // A.ปุ่มและองค์ประกอบต่างๆ
     const startButton = document.getElementById("start-button");
     const pauseButton = document.getElementById("pause-button");
     const resumeButton = document.getElementById("resume-button");
@@ -105,8 +95,8 @@ if (window.location.pathname.endsWith('timer.html')) {
     let countdownInterval;
     let remainingTime = 0; // ใช้จำเวลาที่เหลือ
 
-    // --- B. ฟังก์ชันแปลงเวลาและจัดการ UI ---
-    
+
+    //B. ฟังก์ชันแปลงเวลาและจัดการ UI
     function formatTime(totalSeconds) {
         const m = Math.floor(totalSeconds / 60);
         const s = totalSeconds % 60;
@@ -115,7 +105,7 @@ if (window.location.pathname.endsWith('timer.html')) {
 
     // ฟังก์ชันจัดการการแสดงผลปุ่ม (State Management)
     function toggleButtons(state) {
-        // ซ่อนทุกปุ่มก่อน
+        // เริ่มต้นจากซ่อนทุกปุ่ม
         [startButton, pauseButton, resumeButton, cancelButton, boilAgainButton, changeSettingsButton].forEach(btn => {
             if (btn) btn.style.display = "none";
         });
@@ -155,7 +145,7 @@ if (window.location.pathname.endsWith('timer.html')) {
         if (countdownInterval) clearInterval(countdownInterval);
         
         if (bgMusic) {
-        bgMusic.volume = 0.3; // ปรับเสียงเบาหน่อย (30%) จะได้ไม่หนวกหู
+        bgMusic.volume = 0.3; // ปรับเสียงเบาลง30%
         bgMusic.play().catch(e => console.log("Auto-play blocked:", e));
         }
 
@@ -174,7 +164,7 @@ if (window.location.pathname.endsWith('timer.html')) {
             // หมดเวลา
             if (remainingTime <= 0) {
                 clearInterval(countdownInterval);
-                // --- หยุดเพลง BGM เมื่อเสร็จ ---
+                // หยุดเพลง BGM เมื่อเสร็จ
                 if (bgMusic) {
                     bgMusic.pause();
                     bgMusic.currentTime = 0; // รีเซ็ตเพลงไปจุดเริ่มต้น
@@ -232,7 +222,7 @@ if (window.location.pathname.endsWith('timer.html')) {
         }
     }
 
-    // --- C. ผูก Event Listeners กับปุ่ม ---
+    // C. ผูก Event Listeners กับปุ่ม
 
     // ปุ่ม Start (เริ่มครั้งแรก)
     if (startButton) {
@@ -243,7 +233,7 @@ if (window.location.pathname.endsWith('timer.html')) {
     if (pauseButton) {
         pauseButton.addEventListener("click", () => {
             clearInterval(countdownInterval);
-            if (bgMusic) bgMusic.pause(); // หยุดเพลงด้วย
+            if (bgMusic) bgMusic.pause(); // หยุดเพลง
             if (statusText) statusText.textContent = "Paused";
             toggleButtons("paused");
         });
@@ -282,7 +272,7 @@ if (window.location.pathname.endsWith('timer.html')) {
     if (changeSettingsButton) {
         changeSettingsButton.addEventListener("click", () => {
             localStorage.clear();
-            window.location.href = "select.html"; // หรือ index.html
+            window.location.href = "select.html";
         });
     }
 
@@ -292,20 +282,20 @@ if (window.location.pathname.endsWith('timer.html')) {
 
 
 function startImageLoop() {
-    // 1. เลือก div ที่เก็บรูปภาพด้วย ID
+    // เลือก div ที่เก็บรูปภาพด้วย ID
     const container = document.getElementById('egg-display');
     if (!container) return; // ออกจากฟังก์ชันถ้าไม่พบ id
 
-    // 2. เลือกรูปภาพทั้งหมดภายใน div นั้น
+    // เลือกรูปภาพทั้งหมดภายใน div
     const images = container.getElementsByTagName('img');
     let currentIndex = 0; // เริ่มต้นที่รูปแรก (index 0)
 
     // ตรวจสอบว่ามีรูปภาพหรือไม่
     if (images.length === 0) return;
 
-    // 3. ฟังก์ชันสำหรับแสดงรูปภาพถัดไป
+    // ฟังก์ชันสำหรับแสดงรูปภาพถัดไป
     function showNextImage() {
-        // ซ่อนรูปภาพที่กำลังแสดงอยู่ (นำคลาส active ออก)
+        // ซ่อนรูปภาพที่กำลังแสดงอยู่(นำคลาส active ออก)
         if (images[currentIndex]) {
             images[currentIndex].classList.remove('active');
         }
@@ -319,23 +309,24 @@ function startImageLoop() {
         }
     }
 
-    // 4. ตั้งค่าเริ่มต้น: แสดงรูปแรก
+    // ตั้งค่าเริ่มต้น: แสดงรูปแรก
     images[currentIndex].classList.add('active');
 
-    // 5. ตั้งค่า Interval ให้เรียกฟังก์ชัน showNextImage ทุก 2000 มิลลิวินาที (2 วินาที)
-    // เปลี่ยน 2000 เป็นตัวเลขอื่น (หน่วยเป็นมิลลิวินาที) เพื่อเปลี่ยนความเร็ว
+    // ตั้งค่า Interval ให้เรียกฟังก์ชัน showNextImage ทุก2 วินาที
     setInterval(showNextImage, 2000); 
 }
 
-// 6. เรียกฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
+//เรียกฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
 document.addEventListener('DOMContentLoaded', startImageLoop);
+
+
 
 // ดึง Modal element มาเก็บไว้
 var modal = document.getElementById("myModal");
 
-// 💡 ฟังก์ชันใหม่: สลับสถานะ (Toggle)
+// ฟังก์ชันToggle
 function toggleModal() {
-    // 1. ตรวจสอบสถานะปัจจุบัน
+    // ตรวจสอบสถานะปัจจุบัน
     if (modal.style.display === "block") {
         // ถ้ากำลังแสดงอยู่ (block) ให้เปลี่ยนเป็นซ่อน (none)
         modal.style.display = "none";
@@ -345,12 +336,12 @@ function toggleModal() {
     }
 }
 
-// 💡 ฟังก์ชันปิด Modal โดยปุ่ม X (ถ้ายังต้องการให้ปุ่ม X ทำงานแยก)
+//ฟังก์ชันปิด Modal โดยปุ่ม X (ถ้ายังต้องการให้ปุ่ม X ทำงานแยก)
 function closeModalOnly() {
     modal.style.display = "none";
 }
 
-// 💡 ปิดกล่องข้อความเมื่อคลิกนอก Modal (ยังคงทำงานเหมือนเดิม)
+//ปิดกล่องข้อความเมื่อคลิกนอก Modal (ยังคงทำงานเหมือนเดิม)
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
