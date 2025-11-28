@@ -6,13 +6,13 @@ public class StandardBoilingStrategy implements CookingStrategy {
 
     @Override
     public int calculateTime(Egg egg) {
-        // 1. เตรียมตัวแปรตามหลักวิทยาศาสตร์
+        // 1. เตรียมตัวแปร
         double mass = getMass(egg);           
         double tStart = getStartTemp(egg);    
         double tInternal = getTargetTemp(egg);
         double tWater = 100.0;                // น้ำเดือด 100 C
 
-        // 2. สูตร Dr. Charles D. H. Williams
+        // 2. สูตร
         // K ≈ 0.435 (สำหรับหน่วยนาที)
         double K = 0.435; 
         

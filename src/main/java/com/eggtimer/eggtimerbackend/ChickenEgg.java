@@ -1,6 +1,6 @@
 package com.eggtimer.eggtimerbackend;
 
-// Inheritance (การสืบทอด)
+// Inheritance
 public class ChickenEgg extends Egg {
 
     // Constructor ของ ChickenEgg
